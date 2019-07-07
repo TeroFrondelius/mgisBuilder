@@ -2,7 +2,7 @@
 # `julia build_tarballs.jl --help` to see a usage message.
 using BinaryBuilder
 
-name = "mgisBuilder"
+name = "mgis_binaries"
 version = v"1.0-master"
 
 # Collection of sources required to build mgisBuilder
@@ -16,9 +16,9 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir/MFrontGenericInterfaceSupport/
 if [ $target = "x86_64-w64-mingw32" ]; then
-    cmake -DTFEL_INSTALL_PATH=/workspace/destdir/bin -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
+    cmake -DTFEL_INSTALL_PATH=/workspace/destdir/bin -Denable-julia-bindings=ON -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
 else
-    cmake -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
+    cmake -Denable-julia-bindings=ON -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
 fi
 
 make
@@ -39,9 +39,9 @@ products(prefix) = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/Second_build/build_tfelBuilder.v3.2.1-master.jl"
+    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/Second_build/build_tfelBuilder.v3.2.1-master.jl",
+    "https://github.com/JuliaInterop/libcxxwrap-julia/releases/download/v0.5.3/build_libcxxwrap-julia-1.0.v0.5.3.jl"
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
 build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies)
-
