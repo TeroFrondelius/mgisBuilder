@@ -3,7 +3,7 @@
 using BinaryBuilder
 
 name = "mgisBuilder"
-version = v"0.1.0"
+version = v"1.0-master"
 
 # Collection of sources required to build mgisBuilder
 sources = [
@@ -16,16 +16,13 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir/MFrontGenericInterfaceSupport/
 if [ $target = "x86_64-w64-mingw32" ]; then
-    cmake -DCMAKE_CXX_FLAGS=-isystem\ /workspace/destdir/bin -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
+    cmake -DTFEL_INSTALL_PATH=/workspace/destdir/bin -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
 else
     cmake -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
 fi
 
-
 make
 make install
-
-
 
 """
 
