@@ -15,10 +15,18 @@ sources = [
 # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir/MFrontGenericInterfaceSupport/
+
+COMMON_FLAGS=\
+'-DJlCxx_DIR=/workspace/destdir/lib/cmake/JlCxx '\
+'-Denable-julia-bindings=ON '\
+"-DCMAKE_INSTALL_PREFIX=$prefix "\
+"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain"
+
+
 if [ $target = "x86_64-w64-mingw32" ]; then
-    cmake -DTFEL_INSTALL_PATH=/workspace/destdir/bin -Denable-julia-bindings=ON -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
+    cmake -DTFEL_INSTALL_PATH=/workspace/destdir/bin $COMMON_FLAGS
 else
-    cmake -Denable-julia-bindings=ON -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
+    cmake $COMMON_FLAGS
 fi
 
 make
