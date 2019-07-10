@@ -8,17 +8,13 @@ version = v"1.0-master"
 # Collection of sources required to build mgisBuilder
 sources = [
     "https://github.com/thelfer/MFrontGenericInterfaceSupport.git" =>
-    "64662f2c293d5a88fc6f1a21a51dab3fd9a0b8b3",
+    "2e4313f91bc29a57d63c0dc1bd0ae6aa1d771c2d",
 
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir/MFrontGenericInterfaceSupport/
-
-# can be removed when this is merged https://github.com/thelfer/MFrontGenericInterfaceSupport/pull/7
-sed -i 's/^endif(MGIS_APPEND_SUFFIX)/endif(MGIS_APPEND_SUFFIX)\n endif(NOT DEFINED MGIS_JULIA_MODULES_INSTALL_DIRECTORY)/1' bindings/julia/src/CMakeLists.txt
-sed -i 's/^if(MGIS_APPEND_SUFFIX)/if(NOT DEFINED MGIS_JULIA_MODULES_INSTALL_DIRECTORY)\nif(MGIS_APPEND_SUFFIX)/1' bindings/julia/src/CMakeLists.txt
 
 COMMON_FLAGS=\
 '-DJlCxx_DIR=/workspace/destdir/lib/cmake/JlCxx '\
@@ -54,7 +50,7 @@ products(prefix) = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/forth_build/build_tfel_binaries.v3.2.1-master.jl",
+    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.1.0/build_tfel_binaries.v3.2.1-master.jl",
     "https://github.com/JuliaInterop/libcxxwrap-julia/releases/download/v0.5.1/build_libcxxwrap-julia-1.0.v0.5.1.jl",
     "https://github.com/JuliaPackaging/JuliaBuilder/releases/download/v1.0.0-2/build_Julia.v1.0.0.jl"
 ]
