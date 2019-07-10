@@ -8,7 +8,7 @@ version = v"1.0-master"
 # Collection of sources required to build mgisBuilder
 sources = [
     "https://github.com/thelfer/MFrontGenericInterfaceSupport.git" =>
-    "64662f2c293d5a88fc6f1a21a51dab3fd9a0b8b3",
+    "2e4313f91bc29a57d63c0dc1bd0ae6aa1d771c2d",
 
 ]
 
@@ -20,7 +20,8 @@ COMMON_FLAGS=\
 '-DJlCxx_DIR=/workspace/destdir/lib/cmake/JlCxx '\
 '-Denable-julia-bindings=ON '\
 "-DCMAKE_INSTALL_PREFIX=$prefix "\
-"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain"
+"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain "\
+"-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib"
 
 
 if [ $target = "x86_64-w64-mingw32" ]; then
@@ -33,6 +34,7 @@ make
 make install
 
 """
+# >&2 "error to get in debug mode"
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
@@ -43,11 +45,12 @@ platforms = [
 # The products that we will ensure are always built
 products(prefix) = [
     LibraryProduct(prefix, "libMFrontGenericInterface", :libMFrontGenericInterface)
+    LibraryProduct(prefix, "mgis-julia.so", :mgisjulia)
 ]
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/forth_build/build_tfel_binaries.v3.2.1-master.jl",
+    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.1.0/build_tfel_binaries.v3.2.1-master.jl",
     "https://github.com/JuliaInterop/libcxxwrap-julia/releases/download/v0.5.1/build_libcxxwrap-julia-1.0.v0.5.1.jl",
     "https://github.com/JuliaPackaging/JuliaBuilder/releases/download/v1.0.0-2/build_Julia.v1.0.0.jl"
 ]
