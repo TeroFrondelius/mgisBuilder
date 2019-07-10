@@ -16,11 +16,16 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir/MFrontGenericInterfaceSupport/
 
+# can be removed when this is merged https://github.com/thelfer/MFrontGenericInterfaceSupport/pull/7
+sed -i 's/^endif(MGIS_APPEND_SUFFIX)/endif(MGIS_APPEND_SUFFIX)\n endif(NOT DEFINED MGIS_JULIA_MODULES_INSTALL_DIRECTORY)/1' bindings/julia/src/CMakeLists.txt
+sed -i 's/^if(MGIS_APPEND_SUFFIX)/if(NOT DEFINED MGIS_JULIA_MODULES_INSTALL_DIRECTORY)\nif(MGIS_APPEND_SUFFIX)/1' bindings/julia/src/CMakeLists.txt
+
 COMMON_FLAGS=\
 '-DJlCxx_DIR=/workspace/destdir/lib/cmake/JlCxx '\
 '-Denable-julia-bindings=ON '\
 "-DCMAKE_INSTALL_PREFIX=$prefix "\
-"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain"
+"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain "\
+"-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib"
 
 
 if [ $target = "x86_64-w64-mingw32" ]; then
@@ -33,6 +38,7 @@ make
 make install
 
 """
+# >&2 "error to get in debug mode"
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
