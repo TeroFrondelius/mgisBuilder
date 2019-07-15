@@ -39,17 +39,17 @@ make install
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
 platforms = [
-    Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
     Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Linux(:armv7l, libc=:glibc, call_abi=:eabihf, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Linux(:armv7l, libc=:musl, call_abi=:eabihf, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
     Linux(:i686, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Linux(:aarch64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Linux(:powerpc64le, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Linux(:i686, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Linux(:x86_64, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Linux(:aarch64, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Linux(:armv7l, libc=:glibc, call_abi=:eabihf, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Linux(:armv7l, libc=:musl, call_abi=:eabihf, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Linux(:aarch64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Linux(:powerpc64le, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Linux(:i686, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Linux(:x86_64, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Linux(:aarch64, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
 ]
 
 # The products that we will ensure are always built
