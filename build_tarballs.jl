@@ -24,8 +24,8 @@ COMMON_FLAGS=\
 "-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib"
 
 
-if [ $target = "x86_64-w64-mingw32" ]; then
-    cmake -DTFEL_INSTALL_PATH=/workspace/destdir/bin $COMMON_FLAGS
+if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
+    cmake -DTFEL_INSTALL_PATH=$prefix/bin $COMMON_FLAGS
 else
     cmake $COMMON_FLAGS
 fi
@@ -40,6 +40,16 @@ make install
 # platforms are passed in on the command line
 platforms = [
     Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:armv7l, libc=:glibc, call_abi=:eabihf, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:armv7l, libc=:musl, call_abi=:eabihf, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:i686, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:aarch64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:powerpc64le, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:i686, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:x86_64, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Linux(:aarch64, libc=:musl, compiler_abi=CompilerABI(:gcc7, :cxx11))
 ]
 
 # The products that we will ensure are always built
@@ -50,7 +60,7 @@ products(prefix) = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.1.0/build_tfel_binaries.v3.2.1-master.jl",
+    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.3.0/build_tfel_binaries.v3.2.1-master.jl",
     "https://github.com/JuliaInterop/libcxxwrap-julia/releases/download/v0.5.1/build_libcxxwrap-julia-1.0.v0.5.1.jl",
     "https://github.com/JuliaPackaging/JuliaBuilder/releases/download/v1.0.0-2/build_Julia.v1.0.0.jl"
 ]
