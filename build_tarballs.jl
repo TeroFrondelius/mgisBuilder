@@ -25,6 +25,7 @@ COMMON_FLAGS=\
 
 
 if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
+    sed -i -e "\$aset(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")" CMakeLists.txt
     cmake -DTFEL_INSTALL_PATH=$prefix/bin $COMMON_FLAGS
 else
     cmake $COMMON_FLAGS
@@ -41,8 +42,8 @@ make install
 platforms = [
     # Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # Linux(:i686, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    # Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    # Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # MacOS(compiler_abi=CompilerABI(:gcc7, :cxx11))
 ]
 
