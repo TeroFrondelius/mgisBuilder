@@ -25,7 +25,11 @@ COMMON_FLAGS=\
 
 
 if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
-    cmake -DTFEL_INSTALL_PATH=$prefix/bin $COMMON_FLAGS
+    JINDIR=$prefix/include/julia
+    sed -i -e '1ilink_libraries("-latomic")' CMakeLists.txt
+    sed -i -e "2iinclude_directories($JINDIR)" CMakeLists.txt
+
+    cmake -DTFEL_INSTALL_PATH=$prefix/bin -DMGISHOME=$prefix -DTFELHOME=$prefix $COMMON_FLAGS
 else
     cmake $COMMON_FLAGS
 fi
@@ -34,14 +38,13 @@ make
 make install
 
 """
-# >&2 "error to get in debug mode"
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
 platforms = [
     Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # Linux(:i686, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    # Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # MacOS(compiler_abi=CompilerABI(:gcc7, :cxx11))
 ]
