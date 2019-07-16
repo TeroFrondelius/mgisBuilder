@@ -25,8 +25,7 @@ COMMON_FLAGS=\
 
 
 if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
-    sed -i -e "\$aset(CMAKE_CXX_FLAGS \"\${CMAKE_CXX_FLAGS} -march=native\")" CMakeLists.txt
-    cmake -DTFEL_INSTALL_PATH=$prefix/bin $COMMON_FLAGS
+    cmake -DTFEL_INSTALL_PATH=$prefix/bin -DCMAKE_CXX_FLAGS="-march=native" $COMMON_FLAGS
 else
     cmake $COMMON_FLAGS
 fi
