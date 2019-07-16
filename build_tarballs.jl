@@ -25,7 +25,7 @@ COMMON_FLAGS=\
 
 
 if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
-    cmake -DTFEL_INSTALL_PATH=$prefix/bin -DCXX_FLAGS="-march=native" $COMMON_FLAGS
+    cmake -DTFEL_INSTALL_PATH=$prefix/bin -DCXXFLAGS="-march=native" $COMMON_FLAGS
 else
     cmake $COMMON_FLAGS
 fi
