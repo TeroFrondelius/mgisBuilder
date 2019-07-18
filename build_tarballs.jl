@@ -20,33 +20,47 @@ COMMON_FLAGS=\
 '-DJlCxx_DIR=/workspace/destdir/lib/cmake/JlCxx '\
 '-Denable-julia-bindings=ON '\
 "-DCMAKE_INSTALL_PREFIX=$prefix "\
-"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain "
+"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain "\
+"-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib"
 
-WIN32_FLAGS=\
-"-DTFEL_INSTALL_PATH=$prefix/bin "\
-"-DMGISHOME=$prefix "\
-"-DTFELHOME=$prefix "\
-"-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/bin"
 
 if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
+
     JINDIR=$prefix/include/julia
     sed -i -e '1ilink_libraries("-latomic")' CMakeLists.txt
     sed -i -e "2iinclude_directories($JINDIR)" CMakeLists.txt
 
-    cmake $WIN32_FLAGS $COMMON_FLAGS
+    cmake -DTFEL_INSTALL_PATH=$prefix/bin -DMGISHOME=$prefix -DTFELHOME=$prefix $COMMON_FLAGS
+    make
+    make install
+    cd $WORKSPACE/srcdir
+    wget https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.3.0/tfel_binaries.v3.2.1-master.x86_64-linux-gnu.tar.gz
+    tar xzf tfel_binaries.v3.2.1-master.x86_64-linux-gnu.tar.gz
+    export MGISHOME=$WORKSPACE/srcdir
+    export LD_LIBRARY_PATH=$MGISHOME/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$MGISHOME/lib/julia/mgis:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$MGISHOME/lib/include:$LD_LIBRARY_PATH
+    export PATH=$MGISHOME/bin:$PATH
+    export TFELHOME=$MGISHOME
+    mfront --obuild --interface=generic --install-prefix=$prefix --win32 --make MFrontGenericInterfaceSupport/tests/*.mfront
+
 else
-    cmake -DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib $COMMON_FLAGS
+
+    cmake $COMMON_FLAGS
+    make
+    make install
+    mfront --obuild --interface=generic --install-prefix=$prefix tests/*.mfront
+
 fi
 
-make
-make install
+
 
 """
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
 platforms = [
-    Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    #Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
     Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # Linux(:i686, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
@@ -57,6 +71,7 @@ platforms = [
 products(prefix) = [
     LibraryProduct(prefix, "libMFrontGenericInterface", :libMFrontGenericInterface)
     LibraryProduct(prefix, "mgis-julia", :mgisjulia)
+    LibraryProduct(prefix, "libBehaviour", :libBehaviour)
 ]
 
 # Dependencies that must be installed before this package can be built
