@@ -20,26 +20,30 @@ COMMON_FLAGS=\
 '-DJlCxx_DIR=/workspace/destdir/lib/cmake/JlCxx '\
 '-Denable-julia-bindings=ON '\
 "-DCMAKE_INSTALL_PREFIX=$prefix "\
-"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain "
+"-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain "\
+"-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib"
 
-WIN32_FLAGS=\
-"-DTFEL_INSTALL_PATH=$prefix/bin "\
-"-DMGISHOME=$prefix "\
-"-DTFELHOME=$prefix "\
-"-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/bin"
 
 if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
+
     JINDIR=$prefix/include/julia
     sed -i -e '1ilink_libraries("-latomic")' CMakeLists.txt
     sed -i -e "2iinclude_directories($JINDIR)" CMakeLists.txt
 
-    cmake $WIN32_FLAGS $COMMON_FLAGS
+    cmake -DTFEL_INSTALL_PATH=$prefix/bin -DMGISHOME=$prefix -DTFELHOME=$prefix $COMMON_FLAGS
+    make
+    make install
+
 else
-    cmake -DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib $COMMON_FLAGS
+
+    cmake $COMMON_FLAGS
+    make
+    make install
+    mfront --obuild --interface=generic --install-prefix=$prefix tests/*.mfront
+
 fi
 
-make
-make install
+
 
 """
 
@@ -57,12 +61,13 @@ platforms = [
 products(prefix) = [
     LibraryProduct(prefix, "libMFrontGenericInterface", :libMFrontGenericInterface)
     LibraryProduct(prefix, "mgis-julia", :mgisjulia)
+    LibraryProduct(prefix, "libBehaviour", :libBehaviour)
 ]
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
     "https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.3.0/build_tfel_binaries.v3.2.1-master.jl",
-    "https://github.com/JuliaInterop/libcxxwrap-julia/releases/download/v0.5.3/build_libcxxwrap-julia-1.0.v0.5.3.jl",
+    "https://github.com/JuliaInterop/libcxxwrap-julia/releases/download/v0.5.1/build_libcxxwrap-julia-1.0.v0.5.1.jl",
     "https://github.com/JuliaPackaging/JuliaBuilder/releases/download/v1.0.0-2/build_Julia.v1.0.0.jl"
 ]
 
