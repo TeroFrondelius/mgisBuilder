@@ -52,8 +52,8 @@ fi
 platforms = [
     Linux(:x86_64, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
     Windows(:i686, compiler_abi=CompilerABI(:gcc7, :cxx11))
+    Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # Linux(:i686, libc=:glibc, compiler_abi=CompilerABI(:gcc7, :cxx11))
-    # Windows(:x86_64, compiler_abi=CompilerABI(:gcc7, :cxx11))
     # MacOS(compiler_abi=CompilerABI(:gcc7, :cxx11))
 ]
 
