@@ -23,11 +23,15 @@ COMMON_FLAGS=\
 "-DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain "\
 "-DMGIS_JULIA_MODULES_INSTALL_DIRECTORY=$prefix/lib"
 
+if [ $target = "i686-w64-mingw32" ]; then
+
+    sed -i -e '1ilink_libraries("-latomic")' CMakeLists.txt
+
+fi
 
 if [ $target = "x86_64-w64-mingw32" ] || [ $target = "i686-w64-mingw32" ]; then
 
     JINDIR=$prefix/include/julia
-    sed -i -e '1ilink_libraries("-latomic")' CMakeLists.txt
     sed -i -e "2iinclude_directories($JINDIR)" CMakeLists.txt
 
     cmake -DTFEL_INSTALL_PATH=$prefix/bin -DMGISHOME=$prefix -DTFELHOME=$prefix $COMMON_FLAGS
