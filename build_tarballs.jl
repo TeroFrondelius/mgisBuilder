@@ -66,7 +66,7 @@ products(prefix) = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.3.0/build_tfel_binaries.v3.2.1-master.jl",
+    "https://github.com/TeroFrondelius/tfelBuilder/releases/download/v0.5.0/build_tfel_binaries.v3.3.0-dev.jl",
     "https://github.com/JuliaInterop/libcxxwrap-julia/releases/download/v0.5.1/build_libcxxwrap-julia-1.0.v0.5.1.jl",
     "https://github.com/JuliaPackaging/JuliaBuilder/releases/download/v1.0.0-2/build_Julia.v1.0.0.jl"
 ]
